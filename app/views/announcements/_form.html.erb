@@ -1,0 +1,30 @@
+﻿<%= form_with(model: announcement) do |f| %>
+    <% if announcement.errors.any?%>
+        <div style="color: red">
+            <h2><%= pluralize(announcement.errors.count, "error") %> prohibited this announcement from being saved:</h2>
+            <ul>
+                <% announcement.errors.each do |message| %>
+                    <li><%= message.full_message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+    <div class="field">
+        <%= f.label :content, style:"display: block" %>
+        <%= f.text_area :content %>
+    </div>
+    <div class="field">
+        <%= f.label :expire, style:"display: block" %>
+        <%= f.datetime_local_field :expire%>
+    </div>
+
+        <div class="field">
+            <%= f.label :see, style:"display: block" %>
+            <%= f.check_box :see%>
+        </div>
+
+
+    <div class="field">
+        <%= f.submit %>
+    </div>
+<% end %>
