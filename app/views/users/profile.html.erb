@@ -1,2 +1,9 @@
 <h1><%= @user.name %></h1>
 <h2><%= @user.email %></h2>
+<% if @user.announcements.any? %>
+    <h3> Announcements (<%= @user.announcements.count %>)</h3>
+    <ol class="announcement">
+        <%= render @announcement %>
+    </ol>
+    <%= will_paginate @announcement %>
+<% end %>

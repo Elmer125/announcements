@@ -4,7 +4,10 @@ class AnnouncementsController < ApplicationController
   before_action :authenticate_user!, except: %i[index]
 
   def index
-    @announcements = Announcement.all.order(created_at: :desc)
+    @announcements = Announcement.where('see IS FALSE AND expire > ?',
+                                        Time.now).all.order(created_at: :desc).paginate(page: params[:page])
+    # nouncements = Announcement.where('see IS FALSE').all.order(created_at: :desc).paginate(page: params[:page])
+    # @announcements = nouncements.where('expire > ?', Time.now)
   end
 
   def show; end
