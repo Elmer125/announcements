@@ -10,7 +10,9 @@ class AnnouncementsController < ApplicationController
     # @announcements = nouncements.where('expire > ?', Time.now)
   end
 
-  def show; end
+  def show
+    mark_notification_as_read
+  end
 
   def new
     @announcement = Announcement.new
@@ -43,6 +45,13 @@ class AnnouncementsController < ApplicationController
   end
 
   private
+
+  def mark_notification_as_read
+    if current_user
+      notifications_to_mark_as_read = @announcement.notifications_as_announcement.where(recipient: current_user)
+      notifications_to_mark_as_read.update_all(read_at: Time.now)
+    end
+  end
 
   def set_announcement
     @announcement = Announcement.find(params[:id])
