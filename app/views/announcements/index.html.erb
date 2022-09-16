@@ -6,12 +6,12 @@
       <% @announcements.each do |announcement|  %>
           <%= render announcement %>
           <p>
-            <%= link_to "Show", announcement%>
+            <%= link_to "Show", announcement, class:"btn btn-info"%>
           </p>
       <% end %>
   </div>
   <%= will_paginate %>
   <div>
-      <%= link_to "New Announcement", new_announcement_path %>
+      <%= link_to "New Announcement", new_announcement_path, class:"btn btn-outline-primary" %>
   </div>
 </div>
