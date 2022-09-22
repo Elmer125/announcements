@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_15_183443) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_22_142124) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "announcements", force: :cascade do |t|
     t.string "content", null: false
     t.datetime "expire"
-    t.boolean "see", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
@@ -36,6 +35,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_15_183443) do
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
   end
 
+  create_table "user_announcements", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "announcement_id", null: false
+    t.boolean "seen", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["announcement_id"], name: "index_user_announcements_on_announcement_id"
+    t.index ["user_id"], name: "index_user_announcements_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -51,4 +60,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_15_183443) do
   end
 
   add_foreign_key "announcements", "users"
+  add_foreign_key "user_announcements", "announcements"
+  add_foreign_key "user_announcements", "users"
 end

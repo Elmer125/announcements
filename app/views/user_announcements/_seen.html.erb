@@ -1,0 +1,14 @@
+<div class="btn btn-group">
+<%= form_with(model: user_announcement) do |f| %>
+        <div class="field d-none" >
+            <%= f.label :seen, style:"display: block" %>
+            <%= f.check_box :seen %>
+        </div>
+        <%= f.submit "Mark As Read",class:"btn btn-outline-warning me-2", id:"mark-read", data:{
+            controller: "user",
+            action: "user#clickButton",
+            user_checkbox_param: "user_announcement_seen",
+        } %>
+<%end%>
+    <%= link_to "Back to announcements", announcements_path,class:"btn btn-outline-secondary me-2" %>
+</div>

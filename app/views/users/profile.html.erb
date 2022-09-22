@@ -3,7 +3,7 @@
 <% if @user.announcements.any? %>
     <h3> Announcements (<%= @user.announcements.count %>)</h3>
     <ol class="announcement">
-        <%= render @announcement %>
+        <%= render 'announcement/announcement', announcement: @announcement %>
     </ol>
     <%= will_paginate @announcement %>
 <% end %>

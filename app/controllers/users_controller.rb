@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :set_user
+  before_action :set_user, only: %i[profile]
   def profile
-    @announcement = @user.announcements.paginate(page: params[:page])
+    @announcement = Announcement.where(user_id: @user.id).order(created_at: :desc).paginate(page: params[:page])
   end
 
   private

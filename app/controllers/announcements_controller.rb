@@ -2,15 +2,19 @@ class AnnouncementsController < ApplicationController
   before_action :correct_user, only: %i[edit update destroy]
   before_action :set_announcement, only: %i[show edit update destroy]
   before_action :authenticate_user!, except: %i[index]
-
+  after_action :create_user_announcement, only: %i[create]
   def index
-    @announcements = Announcement.where('see IS FALSE AND expire > ?',
-                                        Time.now).all.order(created_at: :desc).paginate(page: params[:page])
+    @announcements = UserAnnouncement.includes(:user, :announcement).where('seen IS FALSE AND user_id=(?)',
+                                                                           current_user.id).order(created_at: :desc).paginate(page: params[:page])
+
+    # @announcements = Announcement.where('expire > (?)',
+    #                                    Time.now).all.order(created_at: :desc).paginate(page: params[:page])
     # nouncements = Announcement.where('see IS FALSE').all.order(created_at: :desc).paginate(page: params[:page])
     # @announcements = nouncements.where('expire > ?', Time.now)
   end
 
   def show
+    @user_announcement = UserAnnouncement.find_by(announcement_id: @announcement.id, user_id: current_user.id)
     mark_notification_as_read
   end
 
@@ -22,6 +26,7 @@ class AnnouncementsController < ApplicationController
 
   def create
     @announcement = Announcement.new(announcement_params)
+    @users = User.all
     # Pasar los datos del user para que pueda crear un anuncio
     @announcement.user = current_user
     if @announcement.save
@@ -46,6 +51,13 @@ class AnnouncementsController < ApplicationController
 
   private
 
+  def create_user_announcement
+    @users.each do |user|
+      @user_announcement = UserAnnouncement.create(user_id: user.id, announcement_id: @announcement.id)
+      @user_announcement.save
+    end
+  end
+
   def mark_notification_as_read
     if current_user
       notifications_to_mark_as_read = @announcement.notifications_as_announcement.where(recipient: current_user)
@@ -58,7 +70,7 @@ class AnnouncementsController < ApplicationController
   end
 
   def announcement_params
-    params.require(:announcement).permit(:content, :expire, :see)
+    params.require(:announcement).permit(:content, :expire)
   end
 
   def correct_user

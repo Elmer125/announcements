@@ -1,12 +1,13 @@
-﻿<li>
-    <div class="container">
-        <div>
-        <p>Contenido: <%= announcement.content%></p>
-        <p>Visto: <%= announcement.see%></p>
-        <p>Expira: <%= announcement.expire%></p>
+﻿<% announcement.each do |_announcement| %>
+    <li>
+        <div class="container">
+            <div>
+            <p>Contenido: <%= _announcement.content %></p>
+            <p>Expira: <%= _announcement.expire %></p>
+            </div>
         </div>
-    </div>
-    <p>
-        <%= link_to "Show", announcement%>
-    </p>
-</li>
+        <p>
+            <%= link_to "Show", _announcement%>
+        </p>
+    </li>
+<% end %>
