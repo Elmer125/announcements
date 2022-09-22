@@ -5,10 +5,11 @@ class Announcement < ApplicationRecord
   after_create_commit :notify_recipient
   before_destroy :cleanup_notifications
   has_noticed_notifications model_name: 'Notification'
+  validates :expire, presence: true
   validate :validate_date
 
   def validate_date
-    errors.add(:expire, "can't be in the past") if expire < Date.today
+    errors.add(:expire, "can't be in the past") if !expire.blank? && (expire < Date.today)
   end
 
   private
