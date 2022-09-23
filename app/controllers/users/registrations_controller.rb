@@ -53,10 +53,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def create_announcements
-    @announcement = Announcement.all
-    @announcement.each do |announcement|
-      @user_announcement = UserAnnouncement.create(user_id: current_user.id, announcement_id: announcement.id)
-      @user_announcement.save
+    unless current_user.nil?
+      @announcement = Announcement.all
+      @announcement.each do |announcement|
+        @user_announcement = UserAnnouncement.create(user_id: current_user.id, announcement_id: announcement.id)
+        @user_announcement.save
+      end
     end
   end
 

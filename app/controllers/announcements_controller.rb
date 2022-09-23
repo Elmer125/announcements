@@ -1,7 +1,7 @@
 class AnnouncementsController < ApplicationController
   before_action :correct_user, only: %i[edit update destroy]
   before_action :set_announcement, only: %i[show edit update destroy]
-  before_action :authenticate_user!, except: %i[index]
+  before_action :authenticate_user!
   after_action :create_user_announcement, only: %i[create]
   def index
     @announcements = UserAnnouncement.includes(:user, :announcement).where('seen IS FALSE AND user_id=(?)',
